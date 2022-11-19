@@ -9,18 +9,18 @@ class UsersController < ApplicationController
 
   def authenticate
     un = params.fetch("input_username")
-    pw = params.fetch("input_username")
+    pw = params.fetch("input_password")
 
     user = User.where({ :username => un }).at(0)
 
     if user == nil
-      redirect_to("/user_sign_in", {alert => "No one by that name 'round these parts"})
+      redirect_to("/user_sign_in", { :alert => "No one by that name 'round these parts"})
     else 
       if user.authenticate(pw) 
         session.store(:user_id,user.id)
         redirect_to("/", { :notice => "Welcome back, " + user.username})
       else
-        redirect_to("user_sign_in:", { :alert => "Nice try!"})
+        redirect_to("/user_sign_in", { :alert => "Nice try!"})
       end
     end
   
@@ -50,13 +50,14 @@ class UsersController < ApplicationController
 
     user.username = params.fetch("input_username")
     user.password = params.fetch("input_password")
-    user.password_confirmation = params.fetch("input_passsword_conf")
+    user.password_confirmation = params.fetch("input_password_confirmation")
 
     save_status = user.save
     if save_status == true
       session.store(:user_id, user.id)
 
-      redirect_to("/users/<%= user.username%>", { :notice => "Welcome, " + user.username + "!"})
+      redirect_to("/users/" + user.username.to_s, { :notice => "Welcome, " + user.username + "!"})
+      # redirect_to("/users/"+ user.username.to_s)
     else
       redirect_to("/user_sign_up", { :alert => user.errors/full_messages.to_sentence})
     end
