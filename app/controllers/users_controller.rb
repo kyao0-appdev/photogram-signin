@@ -21,7 +21,9 @@ class UsersController < ApplicationController
         redirect_to("/", { :notice => "Welcome back, " + user.username})
       else
         redirect_to("user_sign_in:", { :alert => "Nice try!"})
-    render({ :plain => "hi"})
+      end
+    end
+  
   end
 
 
@@ -32,7 +34,7 @@ class UsersController < ApplicationController
   end
   def index
     @users = User.all.order({ :username => :asc })
-
+    
     render({ :template => "users/index.html" })
   end
 
@@ -40,7 +42,7 @@ class UsersController < ApplicationController
     the_username = params.fetch("the_username")
     @user = User.where({ :username => the_username }).at(0)
 
-    render({ :template => "users/show.html.erb" })
+    render({ :tembinplate => "users/show.html.erb" })
   end
 
   def create
